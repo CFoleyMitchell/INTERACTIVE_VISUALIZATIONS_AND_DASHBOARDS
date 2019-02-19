@@ -60,7 +60,7 @@ function buildMetadata(sample) {
     var bubbleLayout = {
         xaxis: {title: 'OTU IDs'},
         yaxis: {title: 'Sample Values'},
-        title: `Sample Values per OTU ID for SampleID: ${sample}`,
+        title: `Bacteria Clusters, identified as Operational Taxonomic Units (OTUs), discovered in Belly Button of SampleID: ${sample}`,
         hovermode: 'closest'
     };
   
@@ -72,53 +72,18 @@ function buildMetadata(sample) {
     // //(HINT: You will need to use slice() to grab the top 10 sample_values,
     // //otu_ids, and labels (10 each)).
     
-    // //Need to sort descending order to get top 10 
-    
-    // // #1
-    // //This function did not give me the same percentage results as the instruction pics.
-    // plotData.sample_values.sort(function (a, b) {
-    //        return d3.descending(a, b);
-    //    });
-  
-    // // #2 
-    // //This function gave me the sort I needed to get the same percentages
-    // //however, the legend is different so it proves that the sort sorted the
-    // //value_sample but did not bring the otu_id with the sort. - ugh
-    // plotData.sample_values.sort(function (a, b) {
-    //     console.log(a, b);   
-    //     return b - a;   
-    //    });
-  
-    // // #3   
-    // //I think I need to do something with the indexes! Nothing rendered.
-    // plotData.sort(function (a, b) {
-    //  return b[2] - a[2];
-    //});
-  
-    // // #4
-    // //okay another thing that I googled...nothing rendered!
-    // pieDataSort = plotData.sort(function(a, b) {
-    //   return b.sample_values - a.sample_values;
-    //   });
-    //   console.log(pieDataSort);
-     
-    // var pie_values = pieDataSort.sample_values.slice(0, 10);
-    // var pie_labels = pieDataSort.otu_ids.slice(0, 10);
-    // var pie_hovertext = pieDataSort.otu_labels.slice(0, 10);
-  
-    // // #5
-    // //This function did not return anything either. 
-    // plotData.sort(function (a, b) {
-    //     return b.sample_values - a.sample_values;   
-    //     });
-  
-    // // Oh, do I need to create an appended array for each sampleID [otu_ids,otu_lables,sample_values] so
-    // // that I can sort like 4 or 5?
-    
-    // #2 is the closest thing I could get to work
-    plotData.sample_values.sort(function (a, b) {  
-      return b - a;   
-     });
+    // //I originally needed to sort the sample_values in descending order to get top 10 samples
+    // //however this did not work because the flask routes were built to provide separate arrays
+    // //for the sample_values, otu_ids, and otu_labels. So, when we sorted the sample_values in js, 
+    // //the otu_ids and otu_labels did not sort with the sample_values. Therefore, the flask code 
+    // //had to be updated (see line 92 of app.py), so now the data is provided in descending order 
+    // //before it is jsonified. Hence, I no longer need the commented code below*, to sort 
+    // //before slicing the data; I can just slice.
+
+    // //*Code to sort sample_values in descending order
+    // plotData.sample_values.sort(function (a, b) {  
+    //   return b - a;   
+    // });
   
   var pie_values = plotData.sample_values.slice(0, 10);
   var pie_labels = plotData.otu_ids.slice(0, 10);
@@ -134,7 +99,7 @@ function buildMetadata(sample) {
     var pieTrace = [trace2];
   
     var pieLayout = {
-      title: `Top 10 OTU_IDs for SampleID: ${sample}`,
+      title: `Top 10 OTUs in Belly Button of SampleID: ${sample}`,
       hovermode: 'closest'
     };
   
